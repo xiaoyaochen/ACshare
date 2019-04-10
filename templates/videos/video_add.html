@@ -1,0 +1,84 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load thumbnail %}
+
+{% block middle %}
+    {% include 'base/head_m.html' %}
+{% endblock %}
+{% block content %}
+
+<section>
+    <div class="wp butler_list_box list">
+<div class="v-settings">
+    <div class="ui two column grid ">
+        <div class="four wide column">
+            {% include "base/left_nav.html" %}
+        </div>
+        <div class="twelve wide column">
+            <div class="v-settings-content">
+
+                <div class="ui grid">
+    <div class="row">
+        <h3>视频添加</h3>
+    </div>
+    <div class="ui divider"></div>
+    <div class="row">
+        <div class="v-form-wrap">
+            {% csrf_token %}
+            <label id="progress_label" class="ui large blue label" for="chunked_upload">
+                <i class="upload icon"></i> 上传视频
+                <input id="chunked_upload" type="file" name="the_file" hidden>
+            </label>
+            <div id="progress_layout" class="n">
+                <div class="ui progress" data-percent="74" id="upload_progress">
+                    <div class="bar">
+                        <div class="progress"></div>
+                    </div>
+                    <div class="label" id="upload_label">正在上传...</div>
+                </div>
+            </div>
+
+            <div id="next_layout" class="n">
+                <button id="next" class="ui primary right labeled icon button">
+                  <i class="right arrow icon"></i>
+                  下一步
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+    </div>
+</section>
+
+{% endblock%}
+
+{% block myjs %}
+
+
+<script>
+var api_chunked_uplad = "{% url 'videos:api_chunked_upload' %}";
+var api_chunked_upload_complete = "{% url 'videos:api_chunked_upload_complete' %}";
+</script>
+            <script src="{% static 'js/jquery.min.js' %}"></script>
+<script src=" {% static 'js/semantic.min.js' %}"></script>
+{#<script src="https://cdn.staticfile.org/jquery/1.9.0/jquery.min.js"></script>#}
+<script src="{% static 'js/upload/jquery.js' %}"></script>
+<script src="{% static 'js/upload/jquery.ui.widget.js' %}"></script>
+<script src="{% static 'js/upload/jquery.iframe-transport.js' %}"></script>
+<script src="{% static 'js/upload/jquery.fileupload.js' %}"></script>
+<script src="{% static 'js/upload/spark-md5.js' %}"></script>
+{#<script src="https://cdn.staticfile.org/semantic-ui/2.4.1/semantic.min.js"></script>#}
+<script src="{% static 'js/upload/video_upload.js' %}"></script>
+
+
+
+<script src="{% static 'js/left_nav.js' %}"></script>
+{% endblock %}
+

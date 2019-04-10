@@ -1,0 +1,24 @@
+{% load static %}
+<div class="middle">
+    <div class="wp">
+        <a href="/"><img class="fl" src="{% static 'images/logol.png' %}"/></a>
+    </div>
+</div>
+<nav>
+				<div class="nav">
+					<div class="wp">
+						<ul>
+							<li class="active" ><a href="/">首页</a></li>
+							<li >
+								<a href="{% url 'videos:ad_video' %}">
+									动漫<img class="hot" src="{% static 'images/nav_hot.png' %}">
+								</a>
+							</li>
+							<li >
+								<a href="{% url 'users:up_men' %}">UP主</a>
+							</li>
+							<li ><a href="{% url 'forums:forums_list' %}">资源帖</a></li>
+						</ul>
+					</div>
+				</div>
+			</nav>

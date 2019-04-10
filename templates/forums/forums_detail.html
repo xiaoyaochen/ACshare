@@ -1,0 +1,117 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+{% load static %}
+{% load thumbnail %}
+{% load video_tag %}
+{% block title %}
+    贴子 - ACshare动漫网
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/dropload1.css' %}">
+{% endblock%}
+{% block content %}
+<section>
+        <div class="wp">
+            <ul  class="crumbs">
+                <li><a href="/">首页</a>></li>
+                <li><a href="{% url 'forums:forums_list' %}">动漫论坛</a> ></li>
+                <li>贴子详细页</li>
+            </ul>
+        </div>
+ </section>
+
+
+
+ <section>
+	<div class="wp butler_list_box list">
+	<div class='left'>
+
+        <div class="tab-content">
+       <h3 class="text-center">{{ forums_obj.title }}</h3>
+       <div class="content">
+           &nbsp&nbsp&nbsp&nbsp{{ forums_obj.content }}
+       </div>
+   </div>
+
+
+        </div>
+        <div class="ui comments">
+            {% if user.is_authenticated %}
+                   <div class="extra content video-view-operation">
+          <dl>
+          <dt>
+                <span class="left floated like">
+                    <i class="like icon cursor" id="like"
+                       forums-id="{{ forums_obj.id }}"></i>
+                    <span id="like-count">{{ forums_obj.up_count }}</span>
+                </span>
+          </dt>
+          <dt>
+          <span class="left floated like">
+                    <i class="eye red icon cursor" id="view"
+                      forums-id="{{ forums_obj.id }}"></i>
+                    <span id="view-count">{{ forums_obj.view_count }}</span>
+                </span>
+        </dd>
+          </dl>
+      </div>
+            <div class="ui divider"></div>
+            {% else %}
+            <div class="ui ignored info attached message">
+                <p>登录后即可浏览与点赞&nbsp;&nbsp;&nbsp;<a href="{% url 'users:user_login' %}?next={{ request.path }}">马上登录</a></p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    </div>
+</section>
+{% endblock %}
+
+
+{% block myjs %}
+    <script>
+        var forums_id = {{ forums_obj.id }}
+        $(function () {
+
+    // 写入csrf
+    $.getScript("/static/js/csrftoken.js");
+
+    // 点赞
+    $("#like").click(function(){
+      var video_id = $("#like").attr("video-id");
+      $.ajax({
+            url: '/forums/like/',
+            data: {
+                forums_id: forums_id,
+                'csrf_token': csrftoken
+            },
+            type: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                var code = data.code
+                if(code == 0){
+                    var likes = data.likes
+                    var user_liked = data.user_liked
+                    $('#like-count').text(likes)
+                    if(user_liked == 0){
+                        $('#like').removeClass("grey").addClass("red")
+                        $('#like').disabled = true
+                    }else{
+                        $('#like').removeClass("red").addClass("grey")
+                    }
+                }else{
+                    var msg = data.msg
+                    alert(msg)
+                }
+
+            },
+            error: function(data){
+              alert("点赞失败")
+            }
+        });
+    });
+})</script>
+
+{% endblock %}
+

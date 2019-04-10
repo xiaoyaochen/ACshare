@@ -1,0 +1,46 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load thumbnail %}
+{% block myc %}
+
+{% endblock %}
+{% block middle %}
+    {% include 'base/head_m.html' %}
+{% endblock %}
+{% block content %}
+
+<section>
+    <div class="wp butler_list_box list">
+    <div class="ui two column grid ">
+        <div class="four wide column">
+            {% include "base/left_nav.html" %}
+        </div>
+    <div class="twelve wide column">
+<h3 class="">我的收藏</h3>
+<div class="ui unstackable items">
+    {% for item in video_list %}
+    <div class="item">
+        <div class="ui tiny image">
+            {% thumbnail item.cover "300x200" crop="center" as im %}
+            <img class="ui image" src="{{ im.url }}" >
+            {% empty %}
+            {% endthumbnail %}
+        </div>
+        <div class="middle aligned content">
+            <a class="header" href="{% url 'videos:detail' item.pk %}">{{ item.title }}</a>
+        </div>
+    </div>
+    {% empty %}
+    <h3>暂无数据</h3>
+    {% endfor %}
+
+</div>
+
+{% include "base/page_nav.html" %}
+    </div>
+    </div>
+    </div>
+</section>
+{% endblock content %}
+
+

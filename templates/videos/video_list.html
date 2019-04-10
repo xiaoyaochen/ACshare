@@ -1,0 +1,80 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load thumbnail %}
+
+{% block middle %}
+    {% include 'base/head_m.html' %}
+{% endblock %}
+{% block content %}
+
+<section>
+    <div class="wp butler_list_box list">
+<div class="v-settings">
+    <div class="ui two column grid ">
+        <div class="four wide column">
+            {% include "base/left_nav.html" %}
+        </div>
+        <div class="twelve wide column">
+            <div class="v-settings-content">
+
+            <div class="ui grid">
+    <div class="row">
+        <h3 class="">视频列表</h3>
+    </div>
+    <div class="row">
+        <table class="ui unstackable single line striped selectable table">
+            <thead>
+            <tr><th>标题</th><th>分类</th><th>状态</th><th>访问次数</th><th>创建时间</th><th>操作</th></tr>
+            </thead>
+            <tbody class="video-list">
+
+            {% for item in video_list %}
+            <tr video-id="{{item.id}}">
+                <td> {{item.title|default:""}}</td>
+                <td> {{item.classification|default:""}}</td>
+                <td> {{item.get_status_display}}</td>
+                <td> {{item.view_count}}</td>
+                <td> {{item.add_time|date:'Y-m-d H:i'}}</td>
+                <td>
+                    <a class="ui primary button video-edit" href="{% url 'videos:video_edit' item.id %}">编辑</a>
+                    <a class="ui button video-delete">删除</a>
+                </td>
+            </tr>
+            {% empty %}
+            <h3>暂无数据</h3>
+            {% endfor %}
+
+
+            </tbody>
+            <tfoot>
+            <tr>
+                <th colspan="6">
+                    {% include 'base/page_nav.html' %}
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+    </div>
+{% include "videos/video_list_modal.html" %}
+</section>
+{% endblock%}
+
+{% block myjs %}
+{#     <script src="https://cdn.staticfile.org/jquery/1.9.0/jquery.min.js"></script>#}
+{#<script src="https://cdn.staticfile.org/semantic-ui/2.4.1/semantic.min.js"></script>#}
+            <script src="{% static 'js/jquery.min.js' %}"></script>
+<script src=" {% static 'js/semantic.min.js' %}"></script>
+<script src="{% static 'js/left_nav.js' %}"></script>
+    <script>
+   var api_video_delete = "{% url 'videos:video_delete' %}";
+</script>
+<script src="{% static 'js/upload/video_list.js' %}"></script>
+{% endblock %}
+

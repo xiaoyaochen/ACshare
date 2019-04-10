@@ -1,0 +1,170 @@
+
+{% extends 'base/base.html' %}
+{% load  static %}
+{% load thumbnail %}
+{% block title%}
+UP主列表 - ACshare动漫网
+{% endblock %}
+<!--crumbs start-->
+{% block content %}
+    <section>
+        <div class="wp">
+            <ul  class="crumbs">
+                <li><a href="/">首页</a>></li>
+                <li><a href="{% url 'users:up_men' %}">up主</a>></li>
+                <li>up主详情</li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+	<div class="wp butler_list_box list">
+	<div class='left'>
+		<div class="butler_list layout">
+                <dl class="des">
+					<dt>
+						<a href="{% url 'users:up_men_detail' upman.id %}">
+                             <div class="picpic">
+                                {% thumbnail upman.avatar "200x200" crop="center" as im %}
+                                  <img width="100" height="100" class="scrollLoading" src="{{ im.url }}"/>
+                                {% empty %}
+                                <img class="scrollLoading" src="{% static 'img/img_default_avatar.png' %}"/>
+                                {% endthumbnail %}
+                             </div>
+                        </a>
+                        <div class="btn">
+							<div class="fr btn2 bdsharebuttonbox">
+                                <span class="fl">分享</span>
+                                <a href="#" class="bds_more" data-cmd="more"></a>
+                            </div>
+						</div>
+
+					</dt>
+					<dl>
+						<a href="{% url 'users:up_men_detail' upman.id %}">
+                            <h1>{{ upman.nick_name }}<span class="key picbig">金牌up主</span></h1>
+                        </a>
+						<ul class="cont">
+							<li>上传数：<span>{{ upman.up_count }}</span></li>
+							<li>性别：<span>{{ upman.get_gender_display }}</span></li>
+							<li>生日：<span>{{ upman.birthday }}</span></li>
+                            <li>邮箱：<span>{{ upman.email }}</span></li>
+						</ul>
+					</dl>
+
+                </dl>
+		 <div class="butler_detail_cont clearfix">
+                <div class="left layout">
+				<div class="head">
+					<ul class="tab_header">
+						<li class="active"><a href="{% url 'videos:ad_video' %}">全部视频</a> </li>
+					</ul>
+				</div>
+                    <div class="companycenter">
+                        <div class="group_list brief">
+                        <div class="ui grid">
+                            {% for item in upman.videoinfo_set.all %}
+                                <div class="four wide column">
+        <div class="ui card">
+            <a class="image" href="{% url 'videos:detail' item.pk %}">
+                {% thumbnail item.cover "300x200" crop="center" as im %}
+                <img class="ui image" src="{{ im.url }}">
+                {% empty %}
+                {% endthumbnail %}
+                <i class="large play icon v-play-icon"></i>
+            </a>
+            <div class="content">
+                <a class="" href="{% url 'videos:detail' item.pk %}">{{ item.title }}</a>
+                <div class="meta">
+                    <span class="date">发布于{{ item.add_time}}</span>
+                </div>
+                <div class="description">
+                    {{ item.view_count}}次观看
+                </div>
+            </div>
+        </div>
+    </div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                    </div>
+                <!--<div class="pageturn">-->
+                    <!--<ul class="pagelist">-->
+                        <!--<li class="active"><a href="?page=1">1</a></li>-->
+                    <!--</ul>-->
+                <!--</div>-->
+            </div>
+            </div>
+
+      </div>
+	</div>
+	<div class="right layout">
+		<div class="head">上传榜</div>
+            {% for upman in sort_upmen %}
+            <dl class="des">
+                <span class="num fl">{{ forloop.counter }}</span>
+                <a href="{% url 'users:up_men_detail' upman.id %}">
+                    <dt>
+                         {% thumbnail upman.avatar "200x200" crop="center" as im %}
+                                  <img width="50" height="50" class="scrollLoading"  src="{{ im.url }}"/>
+                                {% empty %}
+                        <img width="50" height="50" class="scrollLoading" src="{% static 'img/img_default_avatar.png' %}"/>
+                         {% endthumbnail %}
+                    </dt>
+                </a>
+                <dd>
+                    <a href="{% url 'users:up_men_detail' upman.id %}">
+                        <h3 >{{ upman.nick_name }}</h3>
+                    </a>
+                    <p>上传数：<span>{{ upman.up_count }} </span></p>
+                </dd>
+            </dl>
+            {% endfor %}
+	</div>
+    </div>
+</section>
+{% endblock %}
+
+
+
+
+{% block myjs %}
+<script type="text/javascript">
+//收藏分享
+function add_fav(current_elem, fav_id, fav_type){
+    $.ajax({
+        cache: false,
+        type: "POST",
+        url:"/org/add_fav/",
+        data:{'fav_id':fav_id, 'fav_type':fav_type},
+        async: true,
+        beforeSend:function(xhr, settings){
+            xhr.setRequestHeader("X-CSRFToken", "5I2SlleZJOMUX9QbwYLUIAOshdrdpRcy");
+        },
+        success: function(data) {
+            if(data.status == 'fail'){
+                if(data.msg == '用户未登录'){
+                    window.location.href="login.html";
+                }else{
+                    alert(data.msg)
+                }
+
+            }else if(data.status == 'success'){
+                current_elem.text(data.msg)
+            }
+        },
+    });
+}
+
+$('#jsLeftBtn').on('click', function(){
+    add_fav($(this), 1, 3);
+});
+
+$('#jsRightBtn').on('click', function(){
+    add_fav($(this), 1, 2);
+});
+
+
+</script>
+{% endblock %}

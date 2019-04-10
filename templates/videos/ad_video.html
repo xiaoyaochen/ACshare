@@ -1,0 +1,67 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+{% load static %}
+{% load thumbnail %}
+{% load video_tag %}
+{% block title %}
+    视频 - ACshare动漫网
+{% endblock %}
+
+{% block content %}
+ <section>
+        <div class="wp">
+            <ul  class="crumbs">
+                <li><a href="/">首页</a>></li>
+                <li>动漫视频</li>
+            </ul>
+        </div>
+ </section>
+<section>
+    <div class="wp butler_list_box list">
+  	<div class='left'>
+		<div class="listoptions">
+			<ul>
+				<li>
+					<h2>动漫类别</h2>
+                     <div class="more">更多</div>
+					<div class="cont">
+                    <a href=""><span  {% if c %}{% else %}class="active2"{% endif %}>全部</span></a>
+                    {% for item in classification_list %}
+                       <a href="?c={{ item.id }}"><span  {% if c == item.id|stringformat:'s' %}class="active2"{% endif %}>{{ item.title }}</span></a>
+                    {% endfor %}
+					</div>
+				</li>
+			</ul>
+		</div>
+<div class="ui hidden divider"></div>
+<div class="ui grid">
+    {% for item in video_list %}
+    <div class="four wide column">
+        <div class="ui card">
+            <a class="image" href="{% url 'videos:detail' item.pk %}">
+                {% thumbnail item.cover "300x200" crop="center" as im %}
+                <img class="ui image" src="{{ im.url }}">
+                {% empty %}
+                {% endthumbnail %}
+                <i class="large play icon v-play-icon"></i>
+            </a>
+            <div class="content">
+                <a class="" href="{% url 'videos:detail' item.pk %}">{{ item.title }}</a>
+                <div class="meta">
+                    <span class="date">发布于{{ item.add_time|time_since}}</span>
+                </div>
+                <div class="description">
+                    {{ item.view_count}}次观看
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <h3>暂无数据</h3>
+    {% endfor %}
+    </div>
+    {% include "base/page_nav.html" %}
+    </div>
+	</div>
+</section>
+{% endblock %}

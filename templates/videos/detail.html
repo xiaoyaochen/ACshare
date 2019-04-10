@@ -1,0 +1,87 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load video_tag %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/dropload1.css' %}">
+{% endblock%}
+{% block middle %}
+    {%include 'base/head_m.html' %}
+{% endblock %}
+{% block content %}
+<section>
+    <div class="wp butler_list_box list">
+<div class="ui unstackable two column grid">
+    <div class="ten wide column">
+        <video class="video" autoplay="autoplay" controls="controls" controlslist="nodownload"
+               disablePictureInPicture>
+            <source src="{{videoinfo.file.url}}" type="video/mp4">
+        </video>
+        <div class="video-info">
+            <div class="video-title">{{ videoinfo.title }}</div>
+            <div class="video-view-count">{{ videoinfo.view_count }}次观看</div>
+            <div class="video-view-operation">
+                {{videoinfo.desc}}
+            </div>
+       <div class="extra content video-view-operation">
+                <span class="left floated like">
+                    <i class="like {%  user_liked_class videoinfo user %} icon cursor" id="like"
+                       video-id="{{ videoinfo.id }}"></i>
+                    <span id="like-count">{{ videoinfo.count_likers }}</span>
+                </span>
+                <span class="right floated star">
+                    <i class="bookmark {%  user_collected_class videoinfo user %}  icon cursor" id="star"
+                       video-id="{{ videoinfo.id }}"></i>
+                    <span id="collect-count">{{ videoinfo.count_collecters }}</span>
+                </span>
+            </div>
+            <div class="ui divider"></div>
+        </div>
+        <div class="ui comments">
+            {% if user.is_authenticated %}
+            <form class="ui reply form" id="comment_form" method="post"
+                  action="{% url 'comments:submit_comment' videoinfo.pk %}">
+                {% csrf_token %}
+                <div class="field">
+                    {{form.content}}
+                    <input type="hidden" value="{{ videoinfo.id }}" name="video_id">
+                </div>
+                <button class="ui primary button" type="submit">
+                    添加评论
+                </button>
+                <div class="ui info message n">
+                    <div class="item" id="comment-result"></div>
+                </div>
+            </form>
+            {% else %}
+            <div class="ui ignored info attached message">
+                <p>登录后即可评论 &nbsp;&nbsp;&nbsp;<a href="{% url 'users:user_login' %}?next={{ request.path }}">马上登录</a></p>
+            </div>
+            {% endif %}
+            <h3 class="" id="id_comment_label">评论</h3>
+            <div class="comment-list"></div>
+        </div>
+    </div>
+ <div class="six wide column">
+        {% include "videos/recommend.html" %}
+        {% include "videos/ad.html" %}
+    </div>
+</div>
+
+    </div>
+</section>
+{% endblock %}
+
+
+
+{% block myjs %}
+
+<script>
+var comments_url = "{% url 'comments:get_comments' %}"
+var video_id = {{ videoinfo.id }}
+</script>
+<script src="{% static 'js/detail.js' %}"></script>
+<script src="{% static 'js/dropload.js' %}"></script>
+<script src="{% static 'js/load_comments.js' %}"></script>
+
+{% endblock %}
+ 

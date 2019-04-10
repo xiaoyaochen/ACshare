@@ -1,0 +1,111 @@
+
+{% extends 'base/base.html' %}
+{% load  static %}
+{% load thumbnail %}
+{% block title%}
+UP主列表 - ACshare动漫网
+{% endblock %}
+<!--crumbs start-->
+{% block content %}
+    <section>
+        <div class="wp">
+            <ul  class="crumbs">
+                <li><a href="/">首页</a>></li>
+                <li>UP主</li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+	<div class="wp butler_list_box list">
+	<div class='left'>
+		<div class="butler_list layout">
+			<div class="head">
+				<ul class="fl tab_header">
+					<li class="active"><a href="?sort=">全部</a> </li>
+					<li ><a href="?pagenum={{ pages.number }}&sort=up_count&keywords={{ keyword }}">人气 &#8595;</a></li>
+				</ul>
+                <div class="fr butler-num">共<span class="key">{{ all_upmen.count }}</span>人&nbsp;&nbsp;&nbsp;</div>
+			</div>
+            {% for upman in pages %}
+                <dl class="des">
+					<dt>
+						<a href="{% url 'users:up_men_detail' upman.id %}">
+                             <div class="picpic">
+                                {% thumbnail upman.avatar "200x200" crop="center" as im %}
+                                  <img width="100" height="100" class="scrollLoading" src="{{ im.url }}"/>
+                                {% empty %}
+                                <img class="scrollLoading" src="{% static 'img/img_default_avatar.png' %}"/>
+                                {% endthumbnail %}
+                             </div>
+                        </a>
+                        <div class="btn">
+							<div class="fr btn2 bdsharebuttonbox">
+                                <span class="fl">分享</span>
+                                <a href="#" class="bds_more" data-cmd="more"></a>
+                            </div>
+						</div>
+
+					</dt>
+					<dl>
+						<a href="{% url 'users:up_men_detail' upman.id %}">
+                            <h1>{{ upman.nick_name }}<span class="key picbig">金牌up主</span></h1>
+                        </a>
+						<ul class="cont">
+							<li>上传数：<span>{{ upman.up_count }}</span></li>
+							<li>性别：<span>{{ upman.get_gender_display }}</span></li>
+							<li>生日：<span>{{ upman.birthday }}</span></li>
+                            <li>邮箱：<span>{{ upman.email }}</span></li>
+						</ul>
+					</dl>
+                    <a class="buy buyservice" href="{% url 'users:up_men_detail' upman.id %}"><br/>查看<br/>详情</a>
+                </dl>
+            {% endfor %}
+
+
+      </div>
+		<div class="pageturn">
+            <ul class="pagelist">
+            {% if pages.has_previous %}
+                 <li class="long"><a href="?pagenum={{ pages.previous_page_number }}&sort={{ sort }}&keywords={{ keyword }}">上一页</a></li>
+
+            {% endif %}
+             {% for num in pages.paginator.page_range %}
+                 <li {% if num == pages.number %} class="active"{% endif %} ><a href="?pagenum={{ pages.number}}&sort={{ sort }}&keywords={{ keyword }}">{{ num }}</a></li>
+
+            {% endfor %}
+            {% if pages.has_next %}
+                 <li class="long"><a href="?pagenum={{ pages.next_page_number }}&sort={{ sort }}&keywords={{ keyword }}">下一页</a></li>
+
+            {% endif %}
+                
+
+            </ul>
+        </div>
+	</div>
+	<div class="right layout">
+		<div class="head">上传榜</div>
+            {% for upman in sort_upmen %}
+            <dl class="des">
+                <span class="num fl">{{ forloop.counter }}</span>
+                <a href="{% url 'users:up_men_detail' upman.id %}">
+                    <dt>
+                         {% thumbnail upman.avatar "200x200" crop="center" as im %}
+                                  <img width="50" height="50" class="scrollLoading"  src="{{ im.url }}"/>
+                                {% empty %}
+                        <img width="50" height="50" class="scrollLoading" src="{% static 'img/img_default_avatar.png' %}"/>
+                         {% endthumbnail %}
+                    </dt>
+                </a>
+                <dd>
+                    <a href="{% url 'users:up_men_detail' upman.id %}">
+                        <h3 >{{ upman.nick_name }}</h3>
+                    </a>
+                    <p>上传数：<span>{{ upman.up_count }} </span></p>
+                </dd>
+            </dl>
+            {% endfor %}
+	</div>
+    </div>
+</section>
+{% endblock %}

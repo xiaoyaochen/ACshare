@@ -1,0 +1,64 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+{% load static %}
+{% load thumbnail %}
+{% block title %}
+    首页 - ACshare动漫网
+{% endblock %}
+
+{% block content %}
+<div class="banner">
+    <div class="wp">
+        <div class="fl">
+            <div class="imgslide">
+                <ul class="imgs">
+                {% for banner in all_banners %}
+                    <li>
+                            <a href="{{ banner.url }}">
+                                <img width="1200" height="478" src="{{ banner.image.url }}" />
+                            </a>
+                        </li>
+                {% endfor %}
+                </ul>
+            </div>
+            <div class="unslider-arrow prev"></div>
+            <div class="unslider-arrow next"></div>
+        </div>
+        </div>
+</div>
+<div class="ui hidden divider"></div>
+ <section>
+    <div class="module">
+    <div class="wp">
+        <div class="ui grid">
+            {% for item in video_list %}
+            <div class="four wide column">
+                <div class="ui card">
+                    <a class="image" href="{% url 'videos:detail' item.pk %}">
+                        {% thumbnail item.cover "300x200" crop="center" as im %}
+                        <img class="ui image" src="{{ im.url }}">
+                        {% empty %}
+                        {% endthumbnail %}
+                        <i class="large play icon v-play-icon"></i>
+                    </a>
+                    <div class="content">
+                        <a class="" href="{% url 'videos:detail' item.pk %}">{{ item.title }}</a>
+                        <div class="meta">
+                            <span class="date">发布于{{ item.add_time}}</span>
+                        </div>
+                        <div class="description">
+                            {{ item.view_count}}次观看
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <h3>暂无数据</h3>
+            {% endfor %}
+        </div>
+    {% include "base/page_nav.html" %}
+    </div>
+    </div>
+ </section>
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load thumbnail %}
+
+{% block middle %}
+    {% include 'base/head_m.html' %}
+{% endblock %}
+{% block content %}
+
+<section>
+    <div class="wp butler_list_box list">
+<div class="v-settings">
+    <div class="ui two column grid ">
+        <div class="four wide column">
+            {% include "base/left_nav.html" %}
+        </div>
+        <div class="twelve wide column">
+            <div class="v-settings-content">
+
+            <div class="ui grid">
+    <div class="row">
+        <h3>视频资料</h3>
+    </div>
+    <div class="ui divider"></div>
+    <div class="row">
+        <div class="v-form-wrap">
+
+            <h3>发布成功！</h3>
+            <h3><a href="{% url 'videos:video_list' %}">&lt;&lt;返回列表</a></h3>
+
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+    </div>
+</section>
+
+{% endblock%}
+
+{% block myjs %}
+<script>
+$(function(){
+
+    $('.ui .dropdown').dropdown();
+
+    $("#id_cover").change(function(){
+        $("#file_is_choose").show()
+    });
+
+});
+</script>
+<script src="{% static 'js/left_nav.js' %}"></script>
+{% endblock %}
+

@@ -1,0 +1,72 @@
+{% extends 'base/base.html' %}
+{% load staticfiles %}
+{% load static %}
+{% load thumbnail %}
+{% load video_tag %}
+{% block title %}
+    资源帖列表 - ACshare动漫网
+{% endblock %}
+{% block content %}
+<section>
+        <div class="wp">
+            <ul  class="crumbs">
+                <li><a href="/">首页</a>></li>
+                <li>动漫论坛</li>
+            </ul>
+        </div>
+ </section>
+
+
+
+ <section>
+	<div class="wp butler_list_box list">
+	<div class='left'>
+		<div class="butler_list layout">
+			<div class="head">
+				<ul class="fl tab_header">
+					<li class="active"><a href="?sort=">全部</a> </li>
+					<li ><a href="?pagenum={{ pages.number }}&sort=view_count&keywords={{ keyword }}">人气 &#8595;</a></li>
+				</ul>
+                <div class="fr butler-num">共<span class="key">{{ forums_list.count }}</span>条贴子&nbsp;&nbsp;&nbsp;</div>
+                <div class="fr butler-num"><a href="{% url "forums:forums_create" %}" class="logo"> 发帖&nbsp;</a></div>
+			</div>
+            {% for forums in pages %}
+                 <div class="article_item">
+                        <div class="row"><h5><a href="{% url "forums:forums_detail" forums.id %}">{{ forums.title }}:</a></h5></div>
+                        <div class="row">
+{#                            <img class="col-md-2" width="60" height="60" src="{{forums.author.avatar.url }}" alt="">#}
+                            <p class="col-md-10 desc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{forums.content|slice:"15" }}...</p>
+                        </div>
+                        <div class="row small">
+{#                            <span><a href="/blog/{{ article.user.username }}/">{{ article.user.username }}</a></span>&nbsp;&nbsp;#}
+                            <span>发布于:&nbsp;{{ forums.pub|date:"Y-m-d H:i" }}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span class="glyphicon glyphicon-comment">发布人:{{ forums.author.nick_name }}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span class="glyphicon glyphicon-comment">浏览({{ forums.view_count }})</span>&nbsp;&nbsp;
+                            <span class="glyphicon glyphicon-thumbs-up">推荐({{ forums.up_count }})</span>&nbsp;&nbsp;
+                        </div>
+                        <hr>
+                    </div>
+            {% endfor %}
+
+        </div>
+		<div class="pageturn">
+            <ul class="pagelist">
+            {% if pages.has_previous %}
+                 <li class="long"><a href="?pagenum={{ pages.previous_page_number }}&sort={{ sort }}&keywords={{ keyword }}">上一页</a></li>
+
+            {% endif %}
+             {% for num in pages.paginator.page_range %}
+                 <li {% if num == pages.number %} class="active"{% endif %} ><a href="?pagenum={{ num}}&sort={{ sort }}&keywords={{ keyword }}">{{ num }}</a></li>
+
+            {% endfor %}
+            {% if pages.has_next %}
+                 <li class="long"><a href="?pagenum={{ pages.next_page_number }}&sort={{ sort }}&keywords={{ keyword }}">下一页</a></li>
+
+            {% endif %}
+
+            </ul>
+        </div>
+	</div>
+    </div>
+</section>
+{% endblock %}
