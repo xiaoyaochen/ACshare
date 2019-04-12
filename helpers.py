@@ -94,25 +94,3 @@ class AuthorRequiredMixin(View):
 
         return super().dispatch(request, *args, **kwargs)
 
-
-class AdminUserRequiredMixin(View):
-    """
-    管理员拦截器
-    """
-    def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_staff:
-            return redirect('myadmin:login')
-
-        return super().dispatch(request, *args, **kwargs)
-
-
-class SuperUserRequiredMixin(View):
-    """
-    超级用户拦截器
-    """
-    def dispatch(self, request, *args, **kwargs):
-        if not self.request.user.is_superuser:
-            return HttpResponse('无权限')
-
-        return super().dispatch(request, *args, **kwargs)
-
