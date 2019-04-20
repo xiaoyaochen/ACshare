@@ -207,7 +207,7 @@ class VideoListView(LoginRequiredMixin,generic.ListView):
         return VideoInfo.objects.filter(up_man=self.request.user)
 
 
-class VideoEditView(LoginRequiredMixin,AuthorRequiredMixin,generic.UpdateView):
+class VideoEditView(LoginRequiredMixin,generic.UpdateView):
     model = VideoInfo
     form_class = VideoEditForm
     template_name = 'videos/video_edit.html'
