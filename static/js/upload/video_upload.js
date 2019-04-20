@@ -44,8 +44,8 @@ $("#chunked_upload").fileupload({
     console.log('file size --> ' + fileSize);
     console.log('type --> ' + type);
 
-    if(fileSize > 100000000){
-        alert('文件太大了，请上传100M以内的文件');
+    if(fileSize > 1000000000){
+        alert('文件太大了，请上传1000M以内的文件');
         return;
     }
 
